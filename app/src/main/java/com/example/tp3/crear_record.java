@@ -9,7 +9,6 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class crear_record extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -35,17 +34,13 @@ public class crear_record extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void mostrarPicker(int dia, int mes, int año) {
-        DatePickerDialog datePickerDialog= new DatePickerDialog(this, this, dia, mes, año);
+        DatePickerDialog datePickerDialog= new DatePickerDialog(this, this, año, mes, dia);
         datePickerDialog.show();
     }
 
-  //  public void mostrarFecha(DatePicker view, int año, int mes, int dia){
-   //     String fecha= dia+" / "+mes+" / "+año;
-    //    tvFecha.setText(fecha);
-    //}
-
     @Override
     public void onDateSet(DatePicker datePicker, int año, int mes, int dia) {
+        mes = mes+1;
         String fecha= dia+" / "+mes+" / "+año;
         tvFecha.setText(fecha);
     }
