@@ -11,6 +11,9 @@
         android:theme="@style/Theme.Tp3">
         <activity
             android:name=".MainActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".crear_record"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
