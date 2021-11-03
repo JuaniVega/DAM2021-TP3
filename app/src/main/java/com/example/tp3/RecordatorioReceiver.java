@@ -13,7 +13,6 @@ import android.widget.Toast;
 public class RecordatorioReceiver extends BroadcastReceiver {
 
     public static String RECORDATORIO = "com.example.tp3.RECORDATORIO";
-    public static String TEXTO="TEXTO";
 
     @Override
     public void onReceive(Context context, Intent intent) {

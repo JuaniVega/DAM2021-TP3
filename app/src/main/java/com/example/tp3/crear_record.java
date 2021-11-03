@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.*;
 
@@ -33,6 +34,7 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
     int añoCal;
     int horaCal;
     int minCal;
+    int cont=0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +46,14 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
         tvFecha=findViewById(R.id.tvFecha);
         tvHora=findViewById(R.id.tvHora);
         tfNota=findViewById(R.id.tfNota);
-        int dia= Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int mes= Calendar.getInstance().get(Calendar.MONTH);
-        int año= Calendar.getInstance().get(Calendar.YEAR);
-        int hora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int min= Calendar.getInstance().get(Calendar.MINUTE);
         RecordatorioReceiver rec = new RecordatorioReceiver();
 
         btnFecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int dia= Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                int mes= Calendar.getInstance().get(Calendar.MONTH);
+                int año= Calendar.getInstance().get(Calendar.YEAR);
                 mostrarPickerFecha(dia, mes, año);
             }
         });
@@ -61,6 +61,8 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
         btnHora.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int hora= Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+                int min= Calendar.getInstance().get(Calendar.MINUTE);
                 mostrarPickerHora(hora, min);
             }
         });
@@ -72,16 +74,23 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
                 Intent intent= new Intent(crear_record.this, RecordatorioReceiver.class);
                 intent.putExtra("TEXTO", tfNota.getText().toString());
                 intent.setAction(rec.RECORDATORIO);
-                PendingIntent   pendingIntent=PendingIntent.getBroadcast(getApplicationContext(), 0, intent,0);
-                alarm.set(AlarmManager.RTC_WAKEUP, (fechaEnMillis(añoCal,mesCal,diaCal,horaCal,minCal)),  pendingIntent);
+                PendingIntent pendingIntent=PendingIntent.getBroadcast(getApplicationContext(), cont, intent,0);
+                alarm.set(AlarmManager.RTC_WAKEUP, (fechaEnMillis(añoCal,mesCal,diaCal,horaCal,minCal, 0)),  pendingIntent);
 
+                System.out.println(cont);
+
+                Toast.makeText(getApplicationContext(), "RECORDATORIO PROGRAMADO", Toast.LENGTH_LONG).show();
+
+                restaurarPantalla();
+
+                cont++;
             }
         });
     }
 
-    private long fechaEnMillis(int año, int mes, int dia, int hora, int min){
+    private long fechaEnMillis(int año, int mes, int dia, int hora, int min, int seg){
         Calendar cal=Calendar.getInstance();
-        cal.set(año,mes,dia,hora,min);
+        cal.set(año,mes,dia,hora,min, seg);
         long fechaAlarma=cal.getTimeInMillis();
 
         return fechaAlarma;
@@ -95,6 +104,12 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
     private void mostrarPickerHora(int hora, int min) {
         TimePickerDialog timePickerDialog= new TimePickerDialog(this, this,hora, min, false);
         timePickerDialog.show();
+    }
+
+    private void restaurarPantalla(){
+        tvFecha.setText("Fecha seleccionada");
+        tvHora.setText("Horario seleccionado");
+        tfNota.setText("");
     }
 
     @Override
@@ -114,6 +129,16 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
         minCal=min;
 
         String horario= hora+" : "+min;
+
+        if((min>10)&&(hora<10)){
+            horario= "0"+hora+" : "+min;
+        }
+        if((min<10)&&(hora>10)){
+             horario= hora+" : "+"0"+min;
+        }
+        if((min<10)&&(hora<10)){
+             horario= "0"+hora+" : "+"0"+min;
+        }
         tvHora.setText(horario);
     }
 }
