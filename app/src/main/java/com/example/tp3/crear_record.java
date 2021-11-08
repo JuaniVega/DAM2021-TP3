@@ -8,7 +8,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,8 +27,10 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
     private Button btnFecha;
     private Button btnHora;
     private Button btnGuardar;
+    private Button btnProbar;
     private TextView tvFecha;
     private TextView tvHora;
+    private TextView tvMuestra;
     private android.support.design.widget.TextInputEditText tfNota;
 
     int diaCal;
@@ -42,8 +46,10 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
 
         btnFecha=findViewById(R.id.btnSelFecha);
         btnGuardar=findViewById(R.id.btnGuardar);
+        btnProbar=findViewById(R.id.btnprueba);
         btnHora=findViewById(R.id.btnSelHora);
         tvFecha=findViewById(R.id.tvFecha);
+        tvMuestra=findViewById(R.id.tvMuestra);
         tvHora=findViewById(R.id.tvHora);
         tfNota=findViewById(R.id.tfNota);
         RecordatorioReceiver rec = new RecordatorioReceiver();
@@ -70,14 +76,21 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                long fechaMs= fechaEnMillis(añoCal,mesCal,diaCal,horaCal,minCal, 0);
                 final AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent intent= new Intent(crear_record.this, RecordatorioReceiver.class);
                 intent.putExtra("TEXTO", tfNota.getText().toString());
                 intent.setAction(rec.RECORDATORIO);
                 PendingIntent pendingIntent=PendingIntent.getBroadcast(getApplicationContext(), cont, intent,0);
-                alarm.set(AlarmManager.RTC_WAKEUP, (fechaEnMillis(añoCal,mesCal,diaCal,horaCal,minCal, 0)),  pendingIntent);
+                alarm.set(AlarmManager.RTC_WAKEUP, fechaMs,  pendingIntent);
 
-                System.out.println(cont);
+               Date date= new Date(diaCal,mesCal,añoCal,horaCal,minCal);
+
+                RecordatorioModel recordatorioModel = new RecordatorioModel(tfNota.getText().toString(), date);
+
+                RecordatorioPreferencesDataSource recordatorioPreferencesDataSource= new RecordatorioPreferencesDataSource(crear_record.this);
+
+               recordatorioPreferencesDataSource.guardarRecordatorio(recordatorioModel);
 
                 Toast.makeText(getApplicationContext(), "RECORDATORIO PROGRAMADO", Toast.LENGTH_LONG).show();
 
@@ -85,8 +98,19 @@ public class crear_record extends AppCompatActivity implements TimePickerDialog.
 
                 cont++;
             }
+
+        });
+
+        btnProbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RecordatorioPreferencesDataSource recordatorioPreferencesDataSource= new RecordatorioPreferencesDataSource(crear_record.this);
+                String datosRecuperados=recordatorioPreferencesDataSource.recuperarRecordatorios();
+                tvMuestra.setText(datosRecuperados);
+            }
         });
     }
+
 
     private long fechaEnMillis(int año, int mes, int dia, int hora, int min, int seg){
         Calendar cal=Calendar.getInstance();
