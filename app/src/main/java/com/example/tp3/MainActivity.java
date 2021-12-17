@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent i= new Intent (MainActivity.this, crear_record.class);
+        Intent i= new Intent (MainActivity.this, CrearRecordatorios.class);
         startActivity(i);
         this.createNotificationChannel();
     }

@@ -9,9 +9,9 @@ public interface RecordatorioDataSource {
     }
 
     interface RecuperarRecordatorioCallback {
-        void resultado(final boolean exito, final List<RecordatorioModel> recordatorios);
+        void resultado(final boolean exito, final List<String> recordatorios);
     }
 
-    void guardarRecordatorio(final RecordatorioModel recordatorio/*, final GuardarRecordatorioCallback callback*/);
-    String recuperarRecordatorios(/*final RecuperarRecordatorioCallback callback*/);
+    void guardarRecordatorio(final RecordatorioModel recordatorio, final GuardarRecordatorioCallback callback);
+    void recuperarRecordatorios(final RecuperarRecordatorioCallback callback);
 }

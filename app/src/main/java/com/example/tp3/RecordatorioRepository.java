@@ -5,7 +5,5 @@ public class RecordatorioRepository {
     public RecordatorioRepository(final RecordatorioDataSource datasource) {
         this.datasource = datasource;
     }
-
     // Metodos que recuperan los recordatorios usando el data source
-
 }
