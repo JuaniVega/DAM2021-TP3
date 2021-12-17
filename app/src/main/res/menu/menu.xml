@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/item1"
+        android:title="Recordatorios"
+        android:icon="@drawable/ic_baseline_arrow_right_alt_24"
+        android:orderInCategory="1"></item>
+
+    <item android:id="@+id/item2"
+        android:title="Preferencias"
+        android:icon="@drawable/ic_baseline_arrow_right_alt_24"
+        android:orderInCategory="2"></item>
+
+    <item android:id="@+id/item3"
+        android:title="Borrar alarmas"
+        android:icon="@drawable/ic_baseline_arrow_right_alt_24"
+        android:orderInCategory="3"></item>
+
+</menu>
