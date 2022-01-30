@@ -33,11 +33,20 @@ public class ListaRecordatorios extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager= new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         RecordatorioPreferencesDataSource recordatorioPreferencesDataSource= new RecordatorioPreferencesDataSource(ListaRecordatorios.this);
+        RecordatorioRetroFitDataSource recordatorioRetroFitDataSource= new RecordatorioRetroFitDataSource("","");
+
+
+        RecordatorioRepository repositorio = new RecordatorioRepository(recordatorioPreferencesDataSource);
+        //RecordatorioRepository repositorio = new RecordatorioRepository(RecordatorioRoomDataBase.getInstance(getBaseContext()));
+        //RecordatorioRepository repositorio = new RecordatorioRepository(recordatorioRetroFitDataSource);
+
+
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ArrayList<String> myDataSet = new ArrayList<>();
-        recordatorioPreferencesDataSource.recuperarRecordatorios(new RecordatorioDataSource.RecuperarRecordatorioCallback() {
+
+        repositorio.obtenerRecord(new RecordatorioDataSource.RecuperarRecordatorioCallback() {
             @Override
             public void resultado(boolean exito, List<String> recordatorios) {
                 for (int i=0; i<recordatorios.size();i++) {

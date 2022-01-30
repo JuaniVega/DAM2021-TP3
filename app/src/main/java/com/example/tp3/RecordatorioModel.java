@@ -1,13 +1,23 @@
 package com.example.tp3;
 
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Date;
 import java.util.Objects;
 
+@Entity(tableName = "recordatorio")
 public class RecordatorioModel {
+    @ColumnInfo(name = "texto")
     private String texto;
+    @ColumnInfo(name = "fecha")
     private Date fecha;
-
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "id")
     private int id;
 
     public RecordatorioModel(final String texto, final Date fecha) {
@@ -28,10 +38,10 @@ public class RecordatorioModel {
     public void setFecha(final Date fecha) {
             this.fecha = fecha;
             }
-        public int getid() {
+    public int getid() {
             return id;
         }
-        public void setId(final int id) {
+    public void setId(final int id) {
             this.id = id;
         }
 

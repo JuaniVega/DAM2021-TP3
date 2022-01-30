@@ -16,6 +16,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.room.DatabaseConfiguration;
+import androidx.room.InvalidationTracker;
+import androidx.sqlite.db.SupportSQLiteOpenHelper;
+
 import java.util.*;
 
 public class CrearRecordatorios extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -46,6 +51,12 @@ public class CrearRecordatorios extends AppCompatActivity implements TimePickerD
         tfNota=findViewById(R.id.tfNota);
         RecordatorioReceiver rec = new RecordatorioReceiver();
         RecordatorioPreferencesDataSource recordatorioPreferencesDataSource= new RecordatorioPreferencesDataSource(CrearRecordatorios.this);
+        RecordatorioRetroFitDataSource recordatorioRetroFitDataSource= new RecordatorioRetroFitDataSource("","");
+
+       RecordatorioRepository repositorio = new RecordatorioRepository(recordatorioPreferencesDataSource);
+       //RecordatorioRepository repositorio = new RecordatorioRepository(RecordatorioRoomDataBase.getInstance(getBaseContext()));
+       //RecordatorioRepository repositorio = new RecordatorioRepository(recordatorioRetroFitDataSource);
+
         PreferenciaDataSource preferenciaDataSource= new PreferenciaDataSource(this);
         List<RecordatorioModel> listaRM= new ArrayList<RecordatorioModel>();
         toolbar = findViewById(R.id.toolbar);
@@ -91,7 +102,7 @@ public class CrearRecordatorios extends AppCompatActivity implements TimePickerD
                     RecordatorioModel recordatorioModel = new RecordatorioModel(tfNota.getText().toString(), date);
                     listaRM.add(recordatorioModel);
 
-                    recordatorioPreferencesDataSource.guardarRecordatorio(recordatorioModel, new RecordatorioDataSource.GuardarRecordatorioCallback() {
+                    repositorio.guardarRecord(recordatorioModel, new RecordatorioDataSource.GuardarRecordatorioCallback() {
                         @Override
                         public void resultado(boolean exito) {
                             if (exito)
